@@ -43,7 +43,7 @@ function transformer(file, api, options) {
     for (const declaration of path.node.declarations) {
       if (j.MemberExpression.check(declaration.init)
           && declaration.init.object.callee.name === 'require'){
-        const importSpecifier = j.importSpecifier(declaration.id)
+        const importSpecifier = j.importSpecifier(declaration.init.property, declaration.id)
 
         const sourcePath = declaration.init.object.arguments.shift()
 

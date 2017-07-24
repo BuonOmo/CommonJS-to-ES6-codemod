@@ -1,1 +1,1 @@
-import {func as myFunc} from 'lib';
+import { func as myFunc } from 'lib';
