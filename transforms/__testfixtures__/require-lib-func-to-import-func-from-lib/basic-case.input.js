@@ -1,0 +1,1 @@
+const func = require('lib').func;

@@ -24,9 +24,11 @@ function transformer(file, api, options) {
     .find(j.VariableDeclaration, {
       declarations: [{
         init: {
-          type: 'CallExpression',
-          callee: {
-            name: 'require'
+          type: 'MemberExpression',
+          object: {
+            callee: {
+              name: 'require'
+            }
           }
         }
       }]
@@ -39,22 +41,22 @@ function transformer(file, api, options) {
     const rest = []
     const imports = []
     for (const declaration of path.node.declarations) {
-      if (j.CallExpression.check(declaration.init)
-          && declaration.init.callee.name === 'require'){
-        const importSpecifier = j.importDefaultSpecifier(declaration.id)
+      if (j.MemberExpression.check(declaration.init)
+          && declaration.init.object.callee.name === 'require'){
+        const importSpecifier = j.importSpecifier(declaration.init.property, declaration.id)
 
-        const sourcePath = declaration.init.arguments.shift()
+        const sourcePath = declaration.init.object.arguments.shift()
 
-        if (declaration.init.arguments.length) {
+        if (declaration.init.object.arguments.length) {
           logger.error(`${logger.lines(declaration)} too many arguments.`
-                       + 'Aborting transformation')
+            + 'Aborting transformation')
           return file.source
         }
         if (!j.Literal.check(sourcePath)) {
           logger.error(`${logger.lines(declaration)} bad argument.`
-                       + 'Expecting a string literal, got '
-                       + j(sourcePath).toSource()
-                       + '`. Aborting transformation')
+            + 'Expecting a string literal, got '
+            + j(sourcePath).toSource()
+            + '`. Aborting transformation')
           return file.source
         }
         imports.push(j.importDeclaration([importSpecifier], sourcePath))
