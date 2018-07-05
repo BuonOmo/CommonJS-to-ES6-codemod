@@ -7,7 +7,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "jest",
-    "test:coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "test:coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,8 @@
     "jest": "^20.0.4"
   },
   "dependencies": {
-    "jscodeshift": "^0.3.32"
-  }
+    "jscodeshift": "^0.4.0",
+    "snyk": "^1.88.1"
+  },
+  "snyk": true
 }
